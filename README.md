@@ -186,6 +186,8 @@ Iter callback n times and change code from `Book.id === BookAuthor.bookId` to `B
 Can't work with javascript compressor like UglifyJS, but you can exclude `*.funSql.js files`.
 
 ## Thinking SQL
+Relational algebra is good, but implementation(SQL) is suck.
+
 Why everything is flatten?
 It make more low level manipulation compare C language Pointer,
 normalization make more table and you must store redundant KEYs and link theme loop again and again....
