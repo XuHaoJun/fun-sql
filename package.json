@@ -1,0 +1,9 @@
+{
+  "name": "fun-sql",
+  "version": "0.0.1",
+  "description": "A fp style SQL query builder.",
+  "main": "index.js",
+  "scripts": {},
+  "author": "XuHaoJun",
+  "license": "MIT"
+}
