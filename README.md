@@ -58,7 +58,7 @@ console.log(query.toString());
 //        Book.id as bookId,
 //        Author.name as authorName,
 //        SUM(Book.sales) as totalSales,
-//        SUM(Book.sales) as avgSales,
+//        AVG(Book.sales) as avgSales,
 // FROM books as Book
 // INNER JOIN bookAuthors as BookAuthor ON Book.id = BookAuthor.bookId
 // INNER JOIN authors as Author ON BookAuthor.authorId = Author.id
