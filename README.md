@@ -72,8 +72,9 @@ const query = funSqlBuild(funSql => {
 });
 
 console.log(query.toString());
-// SELECT Book.authorId as authorId,
-//        Book.id as bookId,
+// SELECT Book.id as bookId,
+//        Book.title as bookTitle,
+//        Book.authorId as authorId,
 //        Author.name as authorName,
 //        SUM(Book.sales) as totalSales,
 //        AVG(Book.sales) as avgSales,
