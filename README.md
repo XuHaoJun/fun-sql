@@ -179,7 +179,7 @@ const ast = parse(String(yourBuildFunction));
 const sql = ast.toSQL();
 ```
 ### Simulate
-Iter callback n times and change code from `Book.id === BookAuthor.bookId` to `Book.getNext("id") === BookAuthor.getNext("bookId")`.
+Iter callback n times and change code from `Book.id === BookAuthor.bookId` to `Book.next().id === BookAuthor.next().bookId`.
 
 ## Limitation
 
