@@ -185,6 +185,9 @@ Iter callback n times and change code from `Book.id === BookAuthor.bookId` to `B
 
 Can't work with javascript compressor like UglifyJS, but you can exclude `*.funSql.js` files.
 
+## Related work
+[Silk - Functional Relational Mapping for Scala](http://slick.lightbend.com/)
+
 ## Thinking SQL
 Relational algebra is good, but implementation(SQL) is suck.
 
