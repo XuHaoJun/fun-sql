@@ -71,7 +71,7 @@ const query = funSqlBuild(funSql => {
 
   const ordered = mapped.orderBy(
     { field: Mapped.totalSales, sort: 'desc' },
-    { field: Mapped.authorName }
+    { field: funSql.len(Mapped.authorName) }
   );
 
   return ordered;
@@ -98,7 +98,7 @@ console.log(query.toString());
 // ) AS AnotherSet
 // WHERE Book.sales > 100 and LEN(Book.title) > 7
 // GROUP BY Author.id
-// ORDER BY totalSales DESC, authorName
+// ORDER BY totalSales DESC, LEN(authorName)
 
 const funSqlSimulate = require('fun-sql/simulate');
 const dataSets = {
