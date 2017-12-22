@@ -21,14 +21,20 @@ const query = funSqlBuild(funSql => {
   const BookAuthorSet = funSql.table('bookAuthors');
   const BookAuthor = BookAuthorSet.fields;
 
-  const joined = BooksSet.intersection(BookAuthorSet, () => {
+  const joined1 = BooksSet.intersection(BookAuthorSet, () => {
     return Book.id === BookAuthor.bookId;
   }).intersection(AuthorSet, () => {
     return BookAuthor.authorId === Author.id;
   });
-  // const leftoined = Books.intersection(Authors, () => ...).union(Authors);
-  // const rightJoined = Books.intersection(Authors, () => ...).union(Authors);
-  // const fullJoined = Books.union(Authors);
+  const AnotherSet = () => {
+    return BookSet.filter(() => {
+      return Book.authorId !== null;
+    }).map(() => {
+      const { title } = Book;
+      return { bookTitle: title };
+    });
+  }();
+  const joined = joined1.leftJoin(AnotherSet);
 
   const filted = joined.filter(() => {
     return Book.sales > 100 && funSql.len(Book.title) > 7;
@@ -84,11 +90,17 @@ console.log(query.toString());
 // FROM books as Book
 // INNER JOIN bookAuthors as BookAuthor ON Book.id = BookAuthor.bookId
 // INNER JOIN authors as Author ON BookAuthor.authorId = Author.id
+// LEFT JOIN
+// (
+//   SELECT bookTitle as Book.title
+//   FROM books as Book
+//   WHERE Book.authorId IS NOT NULL
+// ) AS AnotherSet
 // WHERE Book.sales > 100 and LEN(Book.title) > 7
 // GROUP BY Author.id
 // ORDER BY totalSales DESC, authorName
 
-const funSqlTestExec = require('fun-sql/testExec');
+const funSqlSimulate = require('fun-sql/simulate');
 const dataSets = {
   books: [
     {
@@ -111,7 +123,7 @@ const dataSets = {
   ]
 };
 
-const rows = funSqlTestExec({ dataSets: dataSets, query: query2 });
+const rows = funSqlSimulate.exec({ dataSets: dataSets, query: query2 });
 console.log(rows);
 // [
 //   {
@@ -128,12 +140,46 @@ console.log(rows);
 // ]
 ```
 
-## How it work?
+## etc.
+### from
+``` js
+funSql.table("table1", "table2");
+```
 
+### where
+``` js
+Book.filter(() => {
+  // ...
+});
+```
+
+### select
+``` js
+Book.map(() => {
+  // ...
+});
+```
+### switch
+``` js
+let range;
+if (totalSales === 0) {
+  range = 'none';
+} else if (totalSales > 1000) {
+  range = 'good';
+} else {
+  range = 'normal';
+}
+```
+
+
+## How it work?
+### to SQL
 ```javascript
 const ast = parse(String(yourBuildFunction));
 const sql = ast.toSQL();
 ```
+### Simulate
+Iter callback n times and change code from `Book.id === BookAuthor.bookId` to `Book.getNext("id") === BookAuthor.getNext("bookId")`.
 
 ## Limitation
 
