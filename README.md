@@ -189,7 +189,7 @@ Can't work with javascript compressor like UglifyJS, but you can exclude `*.funS
 Relational algebra is good, but implementation(SQL) is suck.
 
 Why everything is flatten?
-It make more low level manipulation compare C language pointer,
+It make more low level manipulation compare with C language pointer,
 normalization make more table and you must store redundant KEYs and link theme loop again and again....
 
 
