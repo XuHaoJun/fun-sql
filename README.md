@@ -1,6 +1,6 @@
 # fun-sql
 
-A functional programming style SQL query builder.
+Another SQL query builder.
 
 ## Why?
 
