@@ -1,10 +1,6 @@
 # fun-sql
 
-Another SQL query builder.
-
-## Why?
-
-For fun with SQL.
+A composable SQL query builder.
 
 ## Example
 
@@ -21,9 +17,9 @@ const query = funSqlBuild(funSql => {
   const BookAuthorSet = funSql.table('bookAuthors');
   const BookAuthor = BookAuthorSet.fields;
 
-  const joined1 = BooksSet.intersection(BookAuthorSet, () => {
+  const joined0 = BooksSet.intersect(BookAuthorSet, () => {
     return Book.id === BookAuthor.bookId;
-  }).intersection(AuthorSet, () => {
+  }).intersect(AuthorSet, () => {
     return BookAuthor.authorId === Author.id;
   });
   const AnotherSet = () => {
@@ -34,13 +30,13 @@ const query = funSqlBuild(funSql => {
       return { bookTitle: title };
     });
   }();
-  const joined = joined1.leftJoin(AnotherSet);
+  const joined = joined0.leftJoin(AnotherSet);
 
   const filted = joined.filter(() => {
     return Book.sales > 100 && funSql.len(Book.title) > 7;
   });
 
-  const grouped = filted.groupBy(Author.id);
+  const grouped = filted.groupBy({field: Author.id);
 
   const mapped = grouped.map(() => {
     const bookId = Book.id;
@@ -100,6 +96,41 @@ console.log(query.toString());
 // GROUP BY Author.id
 // ORDER BY totalSales DESC, LEN(authorName)
 
+
+
+// composable sql.
+const anotherQuery = funSqlBuild((funSql) => {
+  const whatHotAuthorSet = funSql.getSet("WhatHotAuthor");
+  const WhatHotAuthor = WhatHotAuthorSet.fields;
+
+  const TweetSet = funSql.table("tweets");
+  const Tweet = TweetSet.fields;
+
+  const joined = WhatHotAuthor.intersect(TweetSet, () => {
+    return WhatHotAuthor.authorId === Tweet.publisherId;
+  });
+
+  const mapped = joined.map(() => {
+    const authorName = WhatHotAuthor.authorName;
+    const tweetMessage = Tweet.message;
+    return {
+      authorName,
+      tweetMessage
+    };
+  });
+
+  const ordered = mapped.orderBy(
+    { field: Tweet.createdAt, sort: 'desc' },
+  );
+
+  const groupedByTweet = ordered.groupBy({field: Tweet.publisherId});
+  const topTenTweetPerPublisher = groupedByTweet.limit(10);
+  return topTenTweetPerPublisher;
+}, { dataSets: { WhatHotAuthor: query.toSet() }});
+
+
+
+// simulate
 const funSqlSimulate = require('fun-sql/simulate');
 const dataSets = {
   books: [
@@ -123,7 +154,7 @@ const dataSets = {
   ]
 };
 
-const rows = funSqlSimulate.exec({ dataSets: dataSets, query: query2 });
+const rows = funSqlSimulate.exec({ dataSets: dataSets, query: query });
 console.log(rows);
 // [
 //   {
@@ -141,26 +172,32 @@ console.log(rows);
 ```
 
 ## etc.
+
 ### from
-``` js
+
+```javascript
 funSql.table("table1", "table2");
 ```
 
 ### where
-``` js
+
+```javascript
 Book.filter(() => {
   // ...
 });
 ```
 
 ### select
-``` js
+
+```javascript
 Book.map(() => {
   // ...
 });
 ```
+
 ### switch
-``` js
+
+```javascript
 let range;
 if (totalSales === 0) {
   range = 'none';
@@ -171,14 +208,17 @@ if (totalSales === 0) {
 }
 ```
 
-
 ## How it work?
+
 ### to SQL
+
 ```javascript
 const ast = parse(String(yourBuildFunction));
 const sql = ast.toSQL();
 ```
+
 ### Simulate
+
 Iter callback n times and change code from `Book.id === BookAuthor.bookId` to `Book.next().id === BookAuthor.next().bookId`.
 
 ## Limitation
@@ -186,15 +226,13 @@ Iter callback n times and change code from `Book.id === BookAuthor.bookId` to `B
 Can't work with javascript compressor like UglifyJS, but you can exclude `*.funSql.js` files.
 
 ## Related work
+
 [Silk - Functional Relational Mapping for Scala](http://slick.lightbend.com/)
 
 ## Thinking SQL
+
 Relational algebra is good, but implementation(SQL) is suck.
 
-Why everything is flatten?
-It make more low level manipulations compare with C language pointer,
-normalization make more tables and you must store redundant KEYs and link theme, release theme do that things again and again....
+Why everything is flatten? It make more low level manipulations compare with C language pointer, normalization make more tables and you must store redundant KEYs and link theme, release theme do that things again and again....
 
-
-Why use Declarative language?
-Imperative language with good static analysis is not enough?
+Why use Declarative language? Imperative language with good static analysis is not enough?
