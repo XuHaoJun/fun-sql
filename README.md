@@ -101,7 +101,7 @@ console.log(query.toString());
 
 // composable sql.
 const anotherQuery = funSqlBuild((funSql) => {
-  const whatHotAuthorSet = funSql.getSet("WhatHotAuthor");
+  const whatHotAuthorSet = funSql.getSet("whatHotAuthors");
   const WhatHotAuthor = WhatHotAuthorSet.fields;
 
   const TweetSet = funSql.table("tweets");
@@ -127,7 +127,7 @@ const anotherQuery = funSqlBuild((funSql) => {
   const groupedByTweet = ordered.groupBy({field: Tweet.publisherId});
   const topTenTweetPerPublisher = groupedByTweet.limit(10);
   return topTenTweetPerPublisher;
-}, { dataSets: { WhatHotAuthor: query.toSet() }});
+}, { dataSets: { whatHotAuthors: query.toSet() }});
 
 
 
