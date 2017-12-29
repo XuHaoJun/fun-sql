@@ -17,7 +17,7 @@ const query = funSqlBuild(funSql => {
   const BookAuthorSet = funSql.table('bookAuthors');
   const BookAuthor = BookAuthorSet.fields;
 
-  const joined0 = BooksSet
+  const joined0 = BookSet
   .intersect(BookAuthorSet, () => {
     return Book.id === BookAuthor.bookId;
   }).intersect(AuthorSet, () => {
