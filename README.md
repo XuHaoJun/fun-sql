@@ -101,7 +101,7 @@ console.log(query.toString());
 
 // composable sql.
 const anotherQuery = funSqlBuild((funSql) => {
-  const whatHotAuthorSet = funSql.getSet("whatHotAuthors");
+  const WhatHotAuthorSet = funSql.getSet("whatHotAuthors");
   const WhatHotAuthor = WhatHotAuthorSet.fields;
 
   const TweetSet = funSql.table("tweets");
