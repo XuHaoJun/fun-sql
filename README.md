@@ -17,7 +17,8 @@ const query = funSqlBuild(funSql => {
   const BookAuthorSet = funSql.table('bookAuthors');
   const BookAuthor = BookAuthorSet.fields;
 
-  const joined0 = BooksSet.intersect(BookAuthorSet, () => {
+  const joined0 = BooksSet
+  .intersect(BookAuthorSet, () => {
     return Book.id === BookAuthor.bookId;
   }).intersect(AuthorSet, () => {
     return BookAuthor.authorId === Author.id;
@@ -36,7 +37,7 @@ const query = funSqlBuild(funSql => {
     return Book.sales > 100 && funSql.len(Book.title) > 7;
   });
 
-  const grouped = filted.groupBy({field: Author.id);
+  const grouped = filted.groupBy({field: Author.id});
 
   const mapped = grouped.map(() => {
     const bookId = Book.id;
