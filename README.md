@@ -236,4 +236,4 @@ Relational algebra is good, but implementation(SQL) is suck.
 
 Why everything is flatten? It make more low level manipulations compare with C language pointer, normalization make more tables and you must store redundant KEYs and link theme, release theme do that things again and again....
 
-Why use Declarative language? Imperative language with good static analysis is not enough?
+Why use Declarative language? Imperative language with good static analysis or use Logic programming language([Prolog](https://en.wikipedia.org/wiki/Prolog)) are not enough?
